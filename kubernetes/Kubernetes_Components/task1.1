@@ -1,0 +1,18 @@
+Try to figure out all the flags the core components
+ANS: 
+vishnu@VISHNU-OM:~/Learning/tasks/task1$ kubectl get pod -n kube-system
+NAME                               READY   STATUS    RESTARTS      AGE
+coredns-64897985d-vsnfm            1/1     Running   0             25h
+etcd-minikube                      1/1     Running   0             25h
+kube-apiserver-minikube            1/1     Running   0             25h
+kube-controller-manager-minikube   1/1     Running   0             25h
+kube-proxy-dsst9                   1/1     Running   0             25h
+kube-scheduler-minikube            1/1     Running   0             25h
+storage-provisioner                1/1     Running   1 (25h ago)   25h
+
+
+Checked all flags from the minikube container path /etc/kubernetes/manifests
+
+What are the controllers enabled by default?
+ANS: All
+--controllers=*

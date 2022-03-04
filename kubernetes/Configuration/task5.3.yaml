@@ -1,0 +1,4 @@
+kubectl create secret generic db-user-pass  --from-file=./username.txt   --from-file=./password.txt
+kubectl create secret generic db-user-pass-fromliteral  --from-literal=username=devuser  --from-literal=password='S!B\*d$zDsb='
+
+In both cases secerts are base64 encoded

@@ -1,0 +1,37 @@
+#Deploy a Pod which serves a static file. The static file should be created when the Pod starts (init container). The pod is able to serve traffic only if the file exists. Gets restarted if the file is deleted. Also, configure liveness and readiness probes
+       
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    volumeMounts:
+    - name: myvol
+      mountPath: /usr/share/nginx/html/
+    readinessProbe:
+      httpGet:
+        scheme: HTTP
+        path: /test.html
+        port: 80
+      initialDelaySeconds: 10
+      periodSeconds: 5
+    livenessProbe:
+      httpGet:
+        path: /test.html
+        port: 80
+      initialDelaySeconds: 3
+      periodSeconds: 3
+  initContainers:
+  - image: busybox
+    name: runtime
+    command: ['sh', '-c', "touch /usr/share/nginx/html/test.html"]
+    volumeMounts:
+    - name: myvol
+      mountPath: /usr/share/nginx/html/
+  volumes:
+  - name: myvol
+    emptyDir: {}
+

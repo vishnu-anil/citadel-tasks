@@ -1,0 +1,6 @@
+#Create two replicas of a pod using deployment, then manually change the labels of the pods to observe new pod being spinned up. Please make sure you understand what's happening.
+ ANS:
+* Created a deployment with 2 replica
+* Edited one of the pod using kubectl edit pod and changed the label
+* Noticed that a new pod came up with the previous label and the edited pod now also remained as it is. 
+* The newly created pod is part of the deployment now and the edited pod is no more part of the deployment

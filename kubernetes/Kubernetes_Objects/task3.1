@@ -1,0 +1,22 @@
+Change the kube-scheduler pod to point to image tag (:not-available) from kube-system namespace and then create any pod, try to understand why that pod is not in running state. You might need to read about static pod about this
+root@VISHNU-OM:~# kubectl get pod 
+NAME                     READY   STATUS    RESTARTS      AGE
+dnsutils                 1/1     Running   6 (58m ago)   13h
+nginx                    0/1     Pending   0             52s
+nginx-85b98978db-b7tt8   1/1     Running   0             88m
+postgres-0               1/1     Running   0             5h40m
+web-0                    1/1     Running   0             12h
+web-1                    1/1     Running   0             12h
+web-2                    1/1     Running   0             12h
+web-kz2r9                1/1     Running   0             12h
+root@VISHNU-OM:~# kubectl get pod -n kube-system
+NAME                               READY   STATUS         RESTARTS      AGE
+coredns-64897985d-vsnfm            1/1     Running        0             28h
+etcd-minikube                      1/1     Running        0             28h
+kube-apiserver-minikube            1/1     Running        0             28h
+kube-controller-manager-minikube   1/1     Running        0             28h
+kube-proxy-dsst9                   1/1     Running        0             28h
+kube-scheduler-minikube            0/1     ErrImagePull   0             109s
+
+
+Modified /etc/kubernetes/manifest/kube-scheduler.yaml

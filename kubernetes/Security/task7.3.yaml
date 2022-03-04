@@ -1,0 +1,4 @@
+What is default service account and where/how it is mounted on a pod in a namespace.
+
+Default service account is created automatically and by default this service account has no permissions. 
+The default service account is a fallback, it is the SA that gets used if a pod does not specify one.

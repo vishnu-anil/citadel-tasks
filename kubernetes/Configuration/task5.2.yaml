@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+data:
+  PASSWORD: 4oCZN2YzLEY5ROKAmQ==
+  USERNAME: YWRtaW4=
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: mysecret
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: testpod
+      image: alpine
+      env:
+        - name: USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: username
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: password
