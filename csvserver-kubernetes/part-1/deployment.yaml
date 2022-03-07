@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: csvserver
+  name: csvserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: csvserver
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: csvserver
+    spec:
+      containers:
+      - image: infracloudio/csvserver:latest
+        name: csvserver
+        ports:
+        - containerPort: 9300        
+        volumeMounts:
+        - mountPath: "/csvserver/inputdata"
+          name: config         
+          subPath: inputdata 
+      volumes:
+        - name: config
+          configMap:
+            name: csvserverconfig 
+            items:
+            - key: "inputdata"
+              path: "inputdata"
