@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: csvserverscript
+data:
+  gencsv.sh: |
+    #!/bin/sh
+    #Description :: Script to generate csv file with default of 10 entries and extendable upto infinity
+    #######
+
+    #Truncate previous output
+    touch /tmp/inputdata
+    >/tmp/inputdata
+    Help()
+    {
+      # Display Help
+      echo "Script to generate csv file"
+      echo
+      echo "Syntax: ./gencsv.sh <count>"
+      echo "options:"
+      echo "h     Print  help"
+      echo
+    }
+
+      echo "10, `echo $RANDOM`" >> /tmp/inputdata
+      

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: csvserver
+  name: csvserver
+spec:
+  ports:
+  - port: 9300
+    protocol: TCP
+    targetPort: 9300
+  selector:
+    app: csvserver
+status:
+  loadBalancer: {}

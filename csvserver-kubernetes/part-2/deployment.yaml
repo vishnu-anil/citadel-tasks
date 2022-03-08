@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: csvserver
+  name: csvserver-autogen
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: csvserver
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: csvserver
+    spec:
+      initContainers:
+      - name: gencsv
+        image: busybox:latest
+        command: ["/bin/sh"]
+        args: ["-c", "/tmp/gencsv.sh"]
+        volumeMounts:                      
+        - name: initscript
+          mountPath: /tmp/gencsv.sh
+          subPath: gencsv.sh
+        - name: filevol
+          mountPath: /tmp 
+      containers:
+      - image: infracloudio/csvserver:latest
+        name: csvserver
+        ports:
+        - containerPort: 9300        
+        volumeMounts:          
+        - name: filevol
+          mountPath: /csvserver/inputdata          
+          subPath: inputdata
+      volumes:
+        - name: filevol
+          emptyDir: {}
+        - name: initscript
+          configMap:
+            name: csvserverscript 
+            defaultMode: 0777  
