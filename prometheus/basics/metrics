@@ -1,0 +1,28 @@
+Counter
+A counter starts at 0, and is incremented. The client does no other calculations. At each scrape Prometheus takes a sample of this state. The rate() function in Prometheus looks at the history of time series over a time period, and calculates how fast it's increasing per second. This can handle multiple Prometheus servers taking samples, and if a scrape fails you'll lose resolution but not data as on the next successful scrape the increments haven't been lost or averaged away.
+
+In addition to rate(), there's increase() and irate() which are the other two functions which operate on counters. While rate() returns per second values, increase() is a convenience function which returns the total across the time period. So for example increase(my_counter_total[1h]) would return the increase in the counter per hour. irate() was discussed previously, it only looks at the last two samples and is useful for high precision graphs over short time frames. resets() tells you how often the counter resets, which can be useful for debugging.
+
+https://www.robustperception.io/how-does-a-prometheus-counter-work
+
+
+Summary
+
+A summary metric exposes three types of metrics with suffix _bucket, _sum, and _count, respectively. The _bucket metric generates observations under a specified limit of the metric. All of these sub-metrics are of type counters. We can use them like any individual counter-type metric.
+
+
+A summary is a combination of other types, to make common patterns simpler to use. A summary consists of two counters, and optionally some gauges. Summary metrics are used to track the size of events, usually how long they take, via their observe method. There's usually also utilities to make it easy to time things.
+https://www.robustperception.io/how-does-a-prometheus-summary-work
+
+
+Gauge
+The value of gauge metrics can increase or decrease. We, therefore, use aggregate operators like sum, average, minimum, or maximum. It has inc, dec, and set methods, plus various utility functions for common uses such as setting the current time.
+
+Aggregation across series is possible with operators like max, min and avg and aggregation across time is possible with functions such as max_over_time, min_over_time and avg_over_time.
+https://www.infracloud.io/blogs/promql-prometheus-guide/
+
+
+Histogram
+https://www.robustperception.io/how-does-a-prometheus-histogram-work
+
+Practice demo instance http://demo.robustperception.io:9090/consoles/index.html
