@@ -1,0 +1,28 @@
+https://www.infracloud.io/blogs/prometheus-operator-helm-guide/
+
+* Understood what is a CRD and CR
+* Installation of prometheus using prometheus operator with helm charts managed by prometheus community
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+helm repo update
+
+helm install prometheus prometheus-community/kube-prometheus-stack
+
+* You can run helm get manifest prometheus | kubectl get -f - command to see all the objects created 
+
+* Difference between scrape config and servicemonitor
+
+* kubectl port-forward  prometheus-prometheus-kube-prometheus-prometheus-0 9090:9090 
+
+* Checked by proxy forwarding and accessing prometheus ui the configurations, targets added etc
+
+* Podmonitor: 
+  PodMonitor declaratively specifies how to directly monitor a group of pods.
+
+PodMonitor vs ServiceMonitor
+One must be wondering that when we have ServiceMonitor in place, then what is the need to have PodMonitor which ultimately do the same job as ServiceMonitor.
+
+The way I see it, ServiceMonitor is suitable if you already have a Service for your pods. However, if in a certain scenario, you don’t have it, then PodMonitor is the right choice.
+
+
