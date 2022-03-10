@@ -25,4 +25,10 @@ One must be wondering that when we have ServiceMonitor in place, then what is th
 
 The way I see it, ServiceMonitor is suitable if you already have a Service for your pods. However, if in a certain scenario, you don’t have it, then PodMonitor is the right choice.
 
+Target discovery:
+
+Static config: One has to manually populate each configs whihc is tidious
+
+service discovery: There are different Prometheus supported service-discovery mechanisms like DNS, Kubernetes, AWS, Consul, custom one, etc. These mechanisms dynamically discover target endpoints to be monitored and scraped. In the case of Kubernetes, it uses the Kubernetes API to discover a list of target endpoints to monitor and scrape.
+
 
