@@ -1,0 +1,29 @@
+In this scenario you will:
+
+Learn about the different types and different categories of template.
+Learn how to template your templates using template tags.
+Combine them together to make complex workflows.
+
+There are several types of templates, divided into two different categories.
+
+The first category defines work to be done. This includes:
+
+Container
+Container Set
+Data
+Resource
+Script
+The second category orchestrate the work:
+
+DAG
+Steps
+Suspend
+
+Template Tags:
+    - name: main
+      container:
+        image: docker/whalesay
+        command: [ cowsay ]
+        args: [ "hello {{workflow.name}}" ]
+https://www.katacoda.com/argoproj/courses/argo-workflows/templates
+

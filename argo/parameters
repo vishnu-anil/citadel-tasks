@@ -1,0 +1,18 @@
+Parameters
+One type of input or output is a parameter. Unlike artifacts, these are plain string values, and are useful for most simple cases.
+
+Input Parameters
+Lets have a look at an example:
+
+    - name: main
+      inputs:
+        parameters:
+          - name: message
+      container:
+        image: docker/whalesay
+        command: [ cowsay ]
+        args: [ "{{inputs.parameters.message}}" ]
+
+If a workflow has parameters, you can change the parameters using -p:
+
+argo submit --watch input-parameters-workflow.yaml -p message='Hi Katacoda!'

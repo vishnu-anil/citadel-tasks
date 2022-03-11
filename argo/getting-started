@@ -1,0 +1,32 @@
+https://www.katacoda.com/argoproj/courses/argo-workflows/getting-started
+Went through the workflows.
+What is a workflow?
+A workflow is defined as a Kubernetes resource. Each workflow consists of one or more templates, one of which is defined as the entrypoint. 
+Each template can be one of several types, in this example we have one template that is a container.
+
+
+kubectl -n argo wait deploy --all --for condition=Available --timeout 2m
+
+* created new workflow with below template
+
+============
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: hello  
+spec:
+  entrypoint: main # the first template to run in the workflows        
+  templates:
+  - name: main           
+    container: # this is a container template
+      image: docker/whalesay # this image prints "hello world" to the console
+
+
+List workflows.
+View a workflow.
+Resubmit a completed workflow.
+
+Template examples: https://argoproj.github.io/argo-workflows/workflow-templates/
+
+Argo CLI: https://argoproj.github.io/argo-workflows/cli/
+
