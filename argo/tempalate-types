@@ -1,0 +1,55 @@
+What other types of work template are there?
+
+A container set allows you to run multiple containers in a single pod. This is useful when you want the containers to share a common workspace.
+
+A data template allows you get data from storage (e.g. S3). This is useful when each item of data represents an item of work that needs doing.
+
+A resource template allows you to create a Kubernetes resource and wait for it to meet a condition (e.g. successful) . This is useful if you want to interoperate with another Kubernetes system, Spark EMR.
+
+A script template allows you to run a script in a container. This is very similar to a container template, but when you've added a script to it.
+
+
+
+DAG Template
+https://www.katacoda.com/argoproj/courses/argo-workflows/templates
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: dag-
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: a
+            template: whalesay
+          - name: b
+            template: whalesay
+            dependencies:
+              - a
+    - name: whalesay
+      container:
+        image: docker/whalesay
+        command: [ cowsay ]
+        args: [ "hello world" ]
+
+The DAG has two tasks: "a" and "b". Both run the "whalesay" template, but as "b" depends on "a", it won't start until " a" has completed successfully
+
+LOOPS
+The ability to run large parallel processing jobs is one of the key features or Argo Workflows. Lets have a look at using loops to do this.
+A DAG allows you to loop over a number of items using withItems:
+
+      dag:
+        tasks:
+          - name: print-message
+            template: whalesay
+            arguments:
+              parameters:
+                - name: message
+                  value: "{{item}}"
+            withItems:
+              - "hello world"
+              - "goodbye world"
+
+

@@ -1,0 +1,13 @@
+Access Token
+If you want to automate tasks with the Argo Server API or CLI, you will need an access token. An access token is just a Kubernetes service account token. So, to set up a service account for our automation, we need to create:
+
+A role with the permission we want to use.
+A service account for our automation user.
+A role binding to bind the role to the service account:
+
+Follow https://www.katacoda.com/argoproj/courses/argo-workflows/api
+
+API endpoints take JSON rather than YAML as their payload, you can submit a workflow using curl:
+
+
+https://2886795291-2746-jago02.environments.katacoda.com/apidocs << Read more about available argo api's here
