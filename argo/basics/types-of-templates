@@ -1,0 +1,9 @@
+* workflow: is a lets say pipeline containing og steps, templates etc
+* template : Itself contains a container execution with certain steps executions
+* workflow templates: Is a reusable template which can be referred in another workflow
+  * This has two refernce capability: one way in which you can call the whole workflow template in a workflow OR you can specifically call any particular template within the workflow template in a workflow. Understand the difference between these terminologies. The youtube video https://www.youtube.com/watch?v=XySJb-WmL3Q&t=3409s at 1 hour 15minute explains this.
+* Cluster workflow template: In general workflow template is namespaced. However if you want to apply a template which is accesisble across the cluster then you should define the tempate of kind ClusterworkflowTemplate.
+Additionally when you want to call a workflowtemplate which is cluster scoped, then in the calling workflow you need to define under the spec section "clusterScope: true". Refer github argoproj/argo for sample tempales.
+
+* cron workflows
+
