@@ -7,7 +7,32 @@ Example event sources: https://github.com/argoproj/argo-events/tree/master/examp
 installation: https://argoproj.github.io/argo-events/installation/
 
 Eventbus
-The eventbus acts as the transport layer of Argo-Events by connecting the event-sources and sensors.
+The eventbus acts as the transport layer of Argo-Events by connecting the event-sources and sensors. 
+apiVersion: argoproj.io/v1alpha1
+kind: EventBus
+metadata:
+  name: default
+spec:
+  nats:
+    native: {}
+The example above brings up a NATS Streaming StatefulSet with 3 replicas in the namespace.
+The following example shows an EventBus with token auth strategy and persistent volumes.
+apiVersion: argoproj.io/v1alpha1
+kind: EventBus
+metadata:
+  name: default
+spec:
+  nats:
+    native:
+      replicas: 3 # optional, defaults to 3, and requires minimal 3
+      auth: token # optional, default to none
+      persistence: # optional
+        storageClassName: standard
+        accessMode: ReadWriteOnce
+        volumeSize: 10Gi
+
+Full spec is avaiable here: https://github.com/argoproj/argo-events/blob/stable/api/event-bus.md#argoproj.io/v1alpha1.NativeStrategy
+
 
 Event-Sources
 publish the events while the sensors subscribe to the events to execute triggers.
@@ -105,5 +130,21 @@ spec:
 
 Event dependency
 A dependency is an event the sensor is waiting to happen.
+
+Trigger
+Trigger k8 resources: https://argoproj.github.io/argo-events/tutorials/04-standard-k8s-resources/
+
+
+Event source:
+EventSource controller creates a k8s deployment (replica number defaults to 1) for each EventSource object to watch the events. HA can be achieved by setting spec.replicas to a number greater than 1.
+Multiple event source: https://argoproj.github.io/argo-events/eventsources/multiple-events/
+
+Triggers:
+There are many triggers you will see here like aws lambda, slack etc. Here I am concentrating on Argo workflow trigger this will do jobs in k8
+https://argoproj.github.io/argo-events/sensors/triggers/argo-workflow/
+
+To make use of Argo CLI operations, The sensor provides the argoWorkflow trigger template,
+workflow-trigger-sample : https://raw.githubusercontent.com/argoproj/argo-events/stable/examples/sensors/special-workflow-trigger.yaml
+
 
 
