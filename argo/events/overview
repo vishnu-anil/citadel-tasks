@@ -1,0 +1,109 @@
+https://argoproj.github.io/argo-events/
+
+supported event sources: https://argoproj.github.io/argo-events/concepts/event_source/
+
+Example event sources: https://github.com/argoproj/argo-events/tree/master/examples/event-sources
+
+installation: https://argoproj.github.io/argo-events/installation/
+
+Eventbus
+The eventbus acts as the transport layer of Argo-Events by connecting the event-sources and sensors.
+
+Event-Sources
+publish the events while the sensors subscribe to the events to execute triggers.
+Event source templates samples: https://github.com/argoproj/argo-events/blob/master/examples/event-sources/aws-sns.yaml
+Eg:
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: aws-sns
+spec:
+  service:
+    ports:
+      - port: 12000
+        targetPort: 12000
+  sns:
+    example:
+      # arn of SNS topic
+      topicArn: arn:aws:sns:us-east-1:XXXXXXXX:test
+      # hook contains configuration for the HTTP server running in the event-source.
+      # AWS will send events to following port and endpoint
+      webhook:
+        # endpoint to listen events on
+        endpoint: "/"
+        # port to run HTTP server on
+        port: "12000"
+        # HTTP request method to allow. In this case, only POST requests are accepted
+        method: POST
+        # url of the event-source service to use to register at AWS.
+        # This url must be reachable from outside the cluster.
+        # The event-source pod is backed by the service defined in the event-source spec. So get the URL for that service AWS can reach to.
+        # The name for the service is in `<event-source-name>-eventsource-svc` format.
+        # You will need to create an Ingress or Openshift Route for the event-source service so that it can be reached from AWS.
+        url: http://url-that-is-reachable-from-AWS
+      # accessKey contains information about K8s secret that stores the access key
+      accessKey:
+        # Key within the K8s secret whose corresponding value (must be base64 encoded) is access key
+        key: accesskey
+        # Name of the K8s secret that contains the access key
+        name: aws-secret
+      # secretKey contains information about K8s secret that stores the secret key
+      secretKey:
+        # Key within the K8s secret whose corresponding value (must be base64 encoded) is secret key
+        key: secretkey
+        # Name of the K8s secret that contains the secret key
+        name: aws-secret
+      # aws region
+      region: us-east-1
+
+
+
+Sensor
+Sensor defines a set of event dependencies (inputs) and triggers (outputs). It listens to events on the eventbus and acts as an event dependency manager to resolve and execute the triggers.
+Complete sensor specification is available: https://github.com/argoproj/argo-events/blob/master/api/sensor.md
+Sample sensor templates: https://github.com/argoproj/argo-events/tree/master/examples/sensors
+
+eg: 
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: webhook
+spec:
+  dependencies:
+    - name: test-dep
+      eventSourceName: webhook
+      eventName: example
+  triggers:
+    - template:
+        name: lambda-trigger
+        awsLambda:
+          functionName: hello
+          region: us-east-1
+          payload:
+            - src:
+                dependencyName: test-dep
+                dataKey: body.name
+              dest: name
+
+          # Optional, possible values: RequestResponse, Event and DryRun
+          # Defaults to RequestResponse, which means invoke the function synchronously.
+          invocationType: Event
+
+          # Optional, use if ServiceAccount doesn't have IAM Role assigned.
+          # More information on IAM roles for service accounts:
+          # https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
+          accessKey:
+            name: aws-secret
+            key: accesskey
+          secretKey:
+            name: aws-secret
+            key: secretkey
+
+          # Optional, use if your IAM user/role should assume another role to
+          # perform this action
+          roleARN: arn:aws:iam::123456789012:role/some-role
+
+Event dependency
+A dependency is an event the sensor is waiting to happen.
+
+
