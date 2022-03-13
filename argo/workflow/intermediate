@@ -1,0 +1,53 @@
+Service account:
+https://argoproj.github.io/argo-workflows/service-accounts/
+In order for Argo to support features such as artifacts, outputs, access to secrets, etc. it needs to communicate with Kubernetes resources using the Kubernetes API. To communicate with the Kubernetes API, Argo uses a ServiceAccount to authenticate itself to the Kubernetes API. You can specify which Role (i.e. which permissions) the ServiceAccount that Argo uses by binding a Role to a ServiceAccount using a RoleBinding
+
+Workflow RBAC
+All pods in a workflow run with the service account specified in workflow.spec.serviceAccountName, or if omitted, the default service account of the workflow's namespace. The amount of access which a workflow needs is dependent on what the workflow needs to do. For example, if your workflow needs to deploy a resource, then the workflow's service account will require 'create' privileges on that resource.
+
+Node field selector: 
+To filter for nodes where the input parameter 'foo' is equal to 'bar':
+--node-field-selector=inputs.parameters.foo.value=bar
+https://argoproj.github.io/argo-workflows/node-field-selector/#examples
+
+Emptydir
+While by default, the Docker and PNS workflow executors can get output artifacts/parameters from the base layer (e.g. /tmp), neither the Kubelet nor the K8SAPI executors can. It is unlikely you can get output artifacts/parameters from the base layer if you run your workflow pods with a security context.
+
+You can work-around this constraint by mounting volumes onto your pod. The easiest way to do this is to use as emptyDir volume.
+https://argoproj.github.io/argo-workflows/empty-dir/
+
+
+Workflow Template
+WorkflowTemplates are definitions of Workflows that live in your cluster. This allows you to create a library of frequently-used templates and reuse them either by submitting them directly (v2.7 and after) or by referencing them from your Workflows.
+https://argoproj.github.io/argo-workflows/workflow-templates/
+
+Workflow Inputs
+Workflows and templates operate on a set of defined parameters and arguments that are supplied to the running container. 
+https://argoproj.github.io/argo-workflows/workflow-inputs/
+
+
+Cluster Workflow templates
+When you want to reuse a template across the cluster you create a clusterworkflowtempalte. other tempaltes are namespaced
+https://argoproj.github.io/argo-workflows/cluster-workflow-templates/
+
+HTTP Templates
+HTTP Template is a type of template which can execute the HTTP Requests.
+https://argoproj.github.io/argo-workflows/http-template/
+
+Container set template
+A container set templates is similar to a normal container or script template, but allows you to specify multiple containers to run within a single pod.
+https://argoproj.github.io/argo-workflows/container-set-template/
+
+
+Dependency logic
+https://argoproj.github.io/argo-workflows/enhanced-depends-logic/
+
+
+Conditional Parameter
+https://argoproj.github.io/argo-workflows/conditional-artifacts-parameters/
+
+Resouce limiting for workflow
+https://argoproj.github.io/argo-workflows/resource-duration/
+
+
+
