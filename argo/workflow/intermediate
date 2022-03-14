@@ -50,4 +50,11 @@ Resouce limiting for workflow
 https://argoproj.github.io/argo-workflows/resource-duration/
 
 
+Lifecyclehook
+A LifecycleHook triggers an action based on a conditional expression. It is configured either at the workflow-level or template-level, for instance as a function of the workflow.status or steps.status, respectively. A LifecycleHook executes during execution time and executes once.
+In other words, a LifecycleHook functions like an exit handler with a conditional expression.
+https://argoproj.github.io/argo-workflows/lifecyclehook/
 
+
+Field reference
+https://argoproj.github.io/argo-workflows/fields/
